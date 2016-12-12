@@ -97,6 +97,11 @@
     return _pointerColor ?: [UIColor whiteColor];
 }
 
+- (UIColor*)overlayColor
+{
+    return _overlayColor ?: [UIColor colorWithWhite:0 alpha:0.8];
+}
+
 - (UIView*)playbackPointerView
 {
    if (!_playbackPointerView) {
@@ -112,8 +117,6 @@
 
 - (void)resetSubviews
 {
-    [self setBackgroundColor:[UIColor blackColor]];
-
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
@@ -138,6 +141,7 @@
     if (self.showsRulerView) {
         CGRect rulerFrame = CGRectMake(0, CGRectGetHeight(self.contentView.frame)*ratio, CGRectGetWidth(self.contentView.frame)+self.thumbWidth, CGRectGetHeight(self.contentView.frame)*0.3);
         ICGRulerView *rulerView = [[ICGRulerView alloc] initWithFrame:rulerFrame widthPerSecond:self.widthPerSecond themeColor:self.themeColor];
+        rulerView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:rulerView];
     }
     
@@ -166,7 +170,7 @@
     [self.leftOverlayView setUserInteractionEnabled:YES];
     UIPanGestureRecognizer *leftPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveLeftOverlayView:)];
     [self.leftOverlayView addGestureRecognizer:leftPanGestureRecognizer];
-    [self.leftOverlayView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
+    self.leftOverlayView.backgroundColor = self.overlayColor;
     [self addSubview:self.leftOverlayView];
     
     // add right overlay view
@@ -182,7 +186,7 @@
     [self.rightOverlayView setUserInteractionEnabled:YES];
     UIPanGestureRecognizer *rightPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveRightOverlayView:)];
     [self.rightOverlayView addGestureRecognizer:rightPanGestureRecognizer];
-    [self.rightOverlayView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
+    self.rightOverlayView.backgroundColor = self.overlayColor;
     [self addSubview:self.rightOverlayView];
     
     [self updateBorderFrames];
